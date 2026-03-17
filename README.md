@@ -160,12 +160,60 @@ Vector search uses pgvector's `<->` cosine distance operator — no external vec
 
 ## Running Locally
 
+### 1. Clone & enter the project
+
 ```bash
-cp .env.example .env        # fill in your keys
-docker compose up           # starts app + local Supabase
+git clone <repo-url>
+cd ApplyPilot
+```
+
+### 2. Create and activate virtual environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate      # macOS / Linux
+# .venv\Scripts\activate       # Windows
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and fill in:
+
+```env
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_KEY=your-service-role-key
+OPENAI_API_KEY=sk-your-openai-key
+```
+
+### 5. Set up Supabase
+
+1. Go to **Supabase Dashboard → Database → Extensions** → enable `vector`
+2. Go to **SQL Editor** → run the contents of `app/db/migrations/001_init.sql`
+
+### 6. Start the backend
+
+```bash
+PYTHONPATH=. uvicorn app.main:app --reload
 ```
 
 API docs available at `http://localhost:8000/docs`
+
+### 7. Verify the connection (optional)
+
+```bash
+PYTHONPATH=. python test_supabase.py
+# Expected output: Got data: []
+```
 
 ---
 
